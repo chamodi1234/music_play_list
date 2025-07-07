@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title> View Playlist</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --primary-bg: #101c3a;
+      --secondary-bg: #182952;
+      --card-bg: #223366;
+      --accent: #3ec6e0;
+      --accent-hover: #2bb3cc;
+      --danger: #e74c3c;
+      --danger-hover: #c0392b;
+      --text-main: #f5f7fa;
+      --text-muted: #b0b8d1;
+      --shadow: 0 4px 24px rgba(30, 60, 120, 0.25);
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: var(--primary-bg);
+      color: var(--text-main);
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: var(--secondary-bg);
+      padding: 32px 24px 24px 24px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    h2, h3 {
+      color: var(--accent);
+      text-align: center;
+      margin: 0 0 18px 0;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    #songs {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .song-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(30, 60, 120, 0.10);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .song-card:hover {
+      background: #2a3d6c;
+      box-shadow: 0 4px 16px rgba(30, 60, 120, 0.18);
+    }
+
+    .song-info {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .song-info strong {
+      font-size: 1.13rem;
+      color: var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .song-info span {
+      color: var(--text-muted);
+      margin-left: 8px;
+      font-size: 1rem;
+    }
+    .song-info a {
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: bold;
+      margin-left: 12px;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+    }
+    .song-info a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    .delete-btn {
+      background: var(--danger);
+      border: none;
+      color: #fff;
+      padding: 9px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      margin-left: 18px;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px rgba(231, 76, 60, 0.10);
+    }
+    .delete-btn:hover {
+      background: var(--danger-hover);
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr 2fr auto;
+      gap: 12px;
+      background: var(--card-bg);
+      padding: 18px 12px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(30, 60, 120, 0.10);
+      align-items: center;
+    }
+    form input[type="text"] {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #2a3d6c;
+      background: #182952;
+      color: var(--text-main);
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+    form input[type="text"]:focus {
+      border: 1.5px solid var(--accent);
+    }
+    button[type="submit"] {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px rgba(62, 198, 224, 0.10);
+    }
+    button[type="submit"]:hover {
+      background: var(--accent-hover);
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        padding: 16px 4vw 18px 4vw;
+      }
+      form {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 14px 6px;
+      }
+      .song-info strong {
+        max-width: 120px;
+      }
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 6px 1vw 10px 1vw;
+      }
+      h2, h3 {
+        font-size: 1.1rem;
+      }
+      .song-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px 8px;
+      }
+      .delete-btn {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">⬅ Back to Playlists</a>
+    <h2>🎵 Songs in This Playlist</h2>
+
+    <div id="songs"></div>
+
+    <h3>Add a New Song</h3>
+    <form id="addSongForm">
+      <input type="text" name="title" placeholder="Song Title" required />
+      <input type="text" name="artist" placeholder="Artist Name" required />
+      <input type="text" name="url" placeholder="Song URL (MP3/YouTube)" required />
+      <button type="submit">➕ Add Song</button>
+    </form>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const playlistId = urlParams.get("id");
+
+    // Load songs and render them
+    function loadSongs() {
+      fetch(`../php/get_songs.php?playlist_id=${playlistId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          const songsDiv = document.getElementById("songs");
+          if (data.length === 0) {
+            songsDiv.innerHTML = "<p style='color:var(--text-muted);text-align:center;'>No songs in this playlist yet.</p>";
+            return;
+          }
+
+          songsDiv.innerHTML = data
+            .map(
+              (song) => `
+              <div class="song-card" data-id="${song.id}">
+                <div class="song-info">
+                  <strong title="${song.title}">${song.title}</strong>
+                  <span>by ${song.artist}</span>
+                  <a href="${song.url}" target="_blank" title="Play Song">▶️ Play</a>
+                </div>
+                <button class="delete-btn" data-id="${song.id}">Delete</button>
+              </div>`
+            )
+            .join("");
+
+          // Add event listeners for delete buttons
+          document.querySelectorAll(".delete-btn").forEach(button => {
+            button.addEventListener("click", () => {
+              const songId = button.getAttribute("data-id");
+              if (confirm("Are you sure you want to delete this song?")) {
+                deleteSong(songId);
+              }
+            });
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to load songs:", err);
+          document.getElementById("songs").innerHTML =
+            "<p style='color:var(--danger);text-align:center;'>Something went wrong while loading songs.</p>";
+        });
+    }
+
+    // Delete song function
+    function deleteSong(songId) {
+      fetch(`../php/delete_song.php?id=${songId}`, {
+        method: "DELETE"
+      })
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to delete song");
+          alert("✅ Song deleted!");
+          loadSongs(); // Refresh song list
+        })
+        .catch(err => alert("Error: " + err.message));
+    }
+
+    loadSongs(); // Load songs on page load
+
+    // Handle adding a new song
+    document.getElementById("addSongForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      formData.append("playlist_id", playlistId);
+
+      fetch("../php/add_song.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to add song");
+          return res.text();
+        })
+        .then(() => {
+          alert("✅ Song added!");
+          this.reset();
+          loadSongs(); // Reload songs without page refresh
+        })
+        .catch((err) => alert("Error: " + err.message));
+    });
+  </script>
+</body>
+</html>

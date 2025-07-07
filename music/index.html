@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎵 Music Playlist Manager</title>
+  <style>
+    :root {
+      --primary-bg: #101c2c;
+      --secondary-bg: #182a47;
+      --accent: #3a8dde;
+      --accent-gradient: linear-gradient(90deg, #3a8dde 0%, #1e3c72 100%);
+      --card-bg: #16233a;
+      --text-main: #eaf1fb;
+      --text-muted: #b0bed9;
+      --shadow: 0 4px 24px rgba(30,60,114,0.25);
+      --radius: 14px;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--primary-bg);
+      margin: 0;
+      padding: 0;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 950px;
+      margin: 40px auto;
+      background: var(--secondary-bg);
+      padding: 36px 24px 32px 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .container::before {
+      content: "";
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #3a8dde55 0%, transparent 80%);
+      z-index: 0;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.7rem;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-shadow: 0 2px 12px #1e3c7244;
+    }
+    header p {
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-size: 1.15rem;
+      margin-bottom: 34px;
+      letter-spacing: 0.2px;
+    }
+    .form-section, .playlists-section {
+      margin-bottom: 44px;
+      position: relative;
+      z-index: 1;
+    }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      background: var(--card-bg);
+      padding: 22px 18px;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 10px #1e3c7233;
+    }
+    form input[type="text"] {
+      flex: 1 1 220px;
+      padding: 13px 16px;
+      font-size: 1.05rem;
+      border-radius: 8px;
+      border: 1.5px solid #2a3d5c;
+      background: #1b2942;
+      color: var(--text-main);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      outline: none;
+    }
+    form input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px #3a8dde33;
+    }
+    form button {
+      padding: 14px 30px;
+      background: var(--accent-gradient);
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.13rem;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px #3a8dde33;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      outline: none;
+    }
+    form button:hover, form button:focus {
+      background: linear-gradient(90deg,#1e3c72 0%,#3a8dde 100%);
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 8px 24px #3a8dde44;
+    }
+    h2 {
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 28px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 8px #1e3c7222;
+    }
+    .playlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 24px;
+      z-index: 1;
+      position: relative;
+    }
+    .playlist-card {
+      background: var(--card-bg);
+      padding: 24px 20px 18px 20px;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 12px #1e3c7233;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: box-shadow 0.3s, transform 0.2s;
+      border: 1.5px solid #22345a;
+      position: relative;
+      overflow: hidden;
+    }
+    .playlist-card::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, #3a8dde33 0%, transparent 80%);
+      z-index: 0;
+    }
+    .playlist-card:hover {
+      box-shadow: 0 8px 28px #3a8dde44;
+      transform: translateY(-3px) scale(1.025);
+      border-color: var(--accent);
+    }
+    .playlist-info h3 {
+      margin: 0 0 10px 0;
+      color: #eaf1fb;
+      font-size: 1.18rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      z-index: 1;
+      position: relative;
+    }
+    .playlist-info p {
+      flex-grow: 1;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      margin-bottom: 16px;
+      z-index: 1;
+      position: relative;
+    }
+    .playlist-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1;
+      position: relative;
+      margin-top: 10px;
+    }
+    .playlist-actions a {
+      text-decoration: none;
+      background: var(--accent-gradient);
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background 0.3s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px #3a8dde33;
+      outline: none;
+    }
+    .playlist-actions a:hover, .playlist-actions a:focus {
+      background: linear-gradient(90deg,#1e3c72 0%,#3a8dde 100%);
+      box-shadow: 0 4px 16px #3a8dde44;
+    }
+    .delete-btn {
+      background: linear-gradient(90deg,#e74c3c 0%,#c0392b 100%);
+      border: none;
+      color: white;
+      padding: 9px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background 0.3s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px #e74c3c33;
+      outline: none;
+    }
+    .delete-btn:hover, .delete-btn:focus {
+      background: linear-gradient(90deg,#c0392b 0%,#e74c3c 100%);
+      box-shadow: 0 4px 16px #e74c3c44;
+    }
+    @media (max-width: 700px) {
+      .container {
+        padding: 18px 4vw 18px 4vw;
+      }
+      .playlist-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 8px 0 8px 0;
+      }
+      form {
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px 6px;
+      }
+      form input[type="text"], form button {
+        width: 100%;
+      }
+      .playlist-card {
+        padding: 16px 10px 12px 10px;
+      }
+    }
+    /* Custom scrollbar for dark mode */
+    ::-webkit-scrollbar {
+      width: 10px;
+      background: #1b2942;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #22345a;
+      border-radius: 8px;
+    }
+    ::selection {
+      background: #3a8dde88;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎶 My Playlist Manager</h1>
+      <p>Organize your music the easy way</p>
+    </header>
+
+    <section class="form-section">
+      <h2>Create New Playlist</h2>
+      <form id="createForm">
+        <input type="text" name="name" placeholder="Playlist Name" required />
+        <input type="text" name="description" placeholder="Description" />
+        <button type="submit">
+          <span style="font-size:1.3em;">➕</span>
+          <span>Add Playlist</span>
+        </button>
+      </form>
+    </section>
+
+    <section class="playlists-section">
+      <h2>📂 Your Playlists</h2>
+      <div id="playlists" class="playlist-grid"></div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
